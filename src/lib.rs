@@ -117,7 +117,8 @@ impl Lexer<'_> {
     let mut sym = String::with_capacity(8);
     loop {
       if let Some(c) = self.chars.peek(0) {
-        if c != ' ' && c != '\t' && c != '\n' && c != '(' && c != ')' {
+        if c != ' ' && c != '\t' && c != '\n' && c != '(' && c != ')'
+        && c != '[' && c != ']' {
           sym.push(c);
           self.chars.next();
         } else { break; }
