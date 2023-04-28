@@ -4,7 +4,8 @@ use std::env;
 use std::io;
 use std::io::prelude::*;
 use std::fs::File;
-use lisptick::{Lexer, Token};
+use lisptick::lexer::Lexer;
+use lisptick::parser::Parser;
 
 fn print_usage() {
   println!(
@@ -21,10 +22,9 @@ fn main() -> io::Result<()> {
       let mut file = File::open(path)?;
       let mut string = String::with_capacity(16);
       file.read_to_string(&mut string)?;
-      let lexer = Lexer::from(string.as_str()).init();
-      for token in lexer.into_iter() {
-        println!("{:#?}", token);
-      }
+      let mut parser = Parser::from(Lexer::from(string.as_str()).init());
+      let list = parser.parse_list();
+      println!("{:#?}", list);
     }
     None => print_usage()
   };
