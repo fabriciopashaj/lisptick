@@ -1,11 +1,10 @@
-#[allow(unused_imports)]
-
-use std::env;
-use std::io;
-use std::io::prelude::*;
-use std::fs::File;
 use lisptick::lexer::Lexer;
 use lisptick::parser::Parser;
+#[allow(unused_imports)]
+use std::env;
+use std::fs::File;
+use std::io;
+use std::io::prelude::*;
 
 fn print_usage() {
   println!(
@@ -13,7 +12,7 @@ fn print_usage() {
     Usage: lisptick [file]
     file :: The file with the code
     "#
-    );
+  );
 }
 
 fn main() -> io::Result<()> {
@@ -26,7 +25,7 @@ fn main() -> io::Result<()> {
       let list = parser.parse_list();
       println!("{:#?}", list);
     }
-    None => print_usage()
+    None => print_usage(),
   };
   Ok(())
 }
