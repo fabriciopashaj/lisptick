@@ -81,7 +81,7 @@ impl Lexer<'_> {
       return false;
     };
     string.push(ch);
-    return true;
+    true
   }
   fn next_str(&mut self) -> Option<Token> {
     let mut string = String::with_capacity(8);
@@ -123,15 +123,11 @@ impl Lexer<'_> {
       exp = 0.1f64;
       self.chars.next();
     }
-    loop {
-      if let Some(c) = self.chars.peek(0) {
-        if ('0'..='9').contains(&c) {
-          value += <u32 as Into<f64>>::into(c as u32 - '0' as u32) * exp;
-          exp /= 10f64;
-          self.chars.next();
-        } else {
-          break;
-        }
+    while let Some(c) = self.chars.peek(0) {
+      if ('0'..='9').contains(&c) {
+        value += <u32 as Into<f64>>::into(c as u32 - '0' as u32) * exp;
+        exp /= 10f64;
+        self.chars.next();
       } else {
         break;
       }
@@ -140,21 +136,17 @@ impl Lexer<'_> {
   }
   fn next_sym(&mut self) -> String {
     let mut sym = String::with_capacity(8);
-    loop {
-      if let Some(c) = self.chars.peek(0) {
-        if (c != ' '
-          && c != '\t'
-          && c != '\n'
-          && c != '('
-          && c != ')'
-          && c != '['
-          && c != ']')
-        {
-          sym.push(c);
-          self.chars.next();
-        } else {
-          break;
-        }
+    while let Some(c) = self.chars.peek(0) {
+      if (c != ' '
+        && c != '\t'
+        && c != '\n'
+        && c != '('
+        && c != ')'
+        && c != '['
+        && c != ']')
+      {
+        sym.push(c);
+        self.chars.next();
       } else {
         break;
       }

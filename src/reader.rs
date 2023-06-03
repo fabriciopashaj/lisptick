@@ -18,6 +18,7 @@ where
   fn from(mut src: I) -> Self {
     let mut buf = [T::default(); L];
     let mut high = 0;
+    #[allow(clippy::needless_range_loop)]
     for i in 0..L {
       if let Some(v) = src.next() {
         buf[i] = v;
@@ -67,18 +68,16 @@ where
   fn _next(&mut self) -> Option<T> {
     if self.high == self.i {
       None
+    } else if let Some(item) = self.src.next() {
+      let r = self.buf[self.i];
+      self.buf[self.i] = item;
+      self.i = (self.i + 1) % L;
+      self.high = (self.high + 1) % L;
+      Some(r)
     } else {
-      if let Some(item) = self.src.next() {
-        let r = self.buf[self.i];
-        self.buf[self.i] = item;
-        self.i = (self.i + 1) % L;
-        self.high = (self.high + 1) % L;
-        Some(r)
-      } else {
-        let r = self.buf[self.i];
-        self.i = (self.i + 1) % L;
-        Some(r)
-      }
+      let r = self.buf[self.i];
+      self.i = (self.i + 1) % L;
+      Some(r)
     }
   }
 }
