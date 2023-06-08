@@ -18,7 +18,7 @@ pub enum Token {
   /// (Sym)bol, for variable names, function names and the like
   Sym(String),
   /// (Str)ing, a string literal
-  Str(String),
+  Str(Vec<char>),
   /// (Number), a number literal
   Number(f64),
 }
@@ -68,7 +68,7 @@ impl Lexer<'_> {
       None
     }
   }
-  fn escape(&mut self, string: &mut String) -> bool {
+  fn escape(&mut self, string: &mut Vec<char>) -> bool {
     let ch = if let Some(c) = self.chars.next() {
       match c {
         'r' => '\r',
@@ -84,7 +84,7 @@ impl Lexer<'_> {
     true
   }
   fn next_str(&mut self) -> Option<Token> {
-    let mut string = String::with_capacity(8);
+    let mut string = Vec::with_capacity(8);
     self.chars.next();
     loop {
       if let Some(c) = self.chars.next() {
