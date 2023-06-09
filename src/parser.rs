@@ -28,7 +28,11 @@ impl Parser<'_> {
         Token::Open => self.parse_list(),
         Token::Close => panic!("Unexpected ')' token"),
         Token::Quote => Node::List(
-          [Node::Sym("quote".to_string()), self.parse_node()].into(),
+          // no identifier can contain spaces, so we use it to identify
+          // the quote function in a way such that we don't interfere with
+          // another possible usage of 'quote' that is not compliant with
+          // traditional lisp
+          [Node::Sym(" ".to_string()), self.parse_node()].into(),
         ),
         Token::Sym(sym) => Node::Sym(sym),
         Token::Str(string) => Node::Str(string),
@@ -83,7 +87,7 @@ mod tests {
           Node::Sym("car".to_string()),
           Node::List(
             [
-              Node::Sym("quote".to_string()),
+              Node::Sym(" ".to_string()),
               Node::List(
                 [
                   Node::Sym("a".to_string()),
